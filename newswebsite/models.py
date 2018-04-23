@@ -16,7 +16,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100, null=False)  # 标题
     intro = models.CharField(max_length=1000)  # 导语
     abstract = models.TextField()  # 摘要
-    category = models.ForeignKey(Category, related_name="cate") #连接分类表的外键，多对一关系
+    category = models.ForeignKey(Category, related_name="cate",on_delete=models.CASCADE) #连接分类表的外键，多对一关系
     content = models.TextField(null=False)  # 内容
     publish_time = models.DateTimeField(null=False, default=now)  # 发布时间
     image = models.FileField(upload_to='article_image')  # 文章配图
@@ -31,7 +31,7 @@ class Article(models.Model):
 
 # 精选文章
 class Best(models.Model):
-    select_article = models.ForeignKey(Article, related_name='select_article')  # 被精选的文章
+    select_article = models.ForeignKey(Article, related_name='select_article',on_delete=models.CASCADE)  # 被精选的文章
     SELECT_REASON = (
         ('今日新闻', '今日新闻'),
         ('首页推荐', '首页推荐'),
@@ -45,7 +45,7 @@ class Best(models.Model):
 
 # 用户信息表
 class UserProfile(models.Model):
-    belong_to = models.OneToOneField(to=User, related_name="profile")  # 所属用户
+    belong_to = models.OneToOneField(to=User, related_name="profile",on_delete=models.CASCADE)  # 所属用户
     avatar = models.FileField(upload_to='avatar')  # 用户头像
 
     def __str__(self):
@@ -54,8 +54,8 @@ class UserProfile(models.Model):
 
 # 评论表
 class Comment(models.Model):
-    belong_article = models.ForeignKey(Article, related_name='article')  # 评论所属的文章
-    belong_user = models.ForeignKey(User, related_name='user')  # 评论者
+    belong_article = models.ForeignKey(Article, related_name='article',on_delete=models.CASCADE)  # 评论所属的文章
+    belong_user = models.ForeignKey(User, related_name='user',on_delete=models.CASCADE)  # 评论者
     words = models.CharField(max_length=200, null=False)  # 评论内容
     created = models.DateTimeField(null=False, default=now)  # 评论时间
 
